@@ -1,0 +1,36 @@
+﻿<Window x:Class="ProjectPRN.FrmDoExam"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ProjectPRN"
+        mc:Ignorable="d"
+        Title="FrmDoExam" Height="500" Width="800">
+    <Grid Height="553" VerticalAlignment="Top">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Vertical" Grid.Row="0" Margin="10">
+            <TextBlock x:Name="TimerTextBlock" FontSize="14" FontWeight="Bold" Margin="680,0,0,0" />
+            <TextBlock x:Name="QuestionNumberTextBlock" FontSize="16" FontWeight="Bold" />
+            <TextBlock x:Name="QuestionPromptTextBlock" FontSize="14" TextWrapping="Wrap" Margin="0,10,0,10" />
+            <TextBlock x:Name="QuestionContentTextBlock" FontSize="14" TextWrapping="Wrap" Margin="0,10,0,10" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Margin="10,34,280,208">
+            <RadioButton x:Name="Answer1RadioButton" GroupName="Answers" Content="Answer 1" Margin="0,5,0,5" />
+            <RadioButton x:Name="Answer2RadioButton" GroupName="Answers" Content="Answer 2" Margin="0,5,0,5" />
+            <RadioButton x:Name="Answer3RadioButton" GroupName="Answers" Content="Answer 3" Margin="0,5,0,5" />
+            <RadioButton x:Name="Answer4RadioButton" GroupName="Answers" Content="Answer 4" Margin="0,5,0,5" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,231,37,73" HorizontalAlignment="Right">
+            <Button Content="Previous" Click="PreviousButton_Click" Width="62" Height="30" Margin="0,0,30,0" />
+            <Button Content="Next" Click="NextButton_Click" Margin="0,0,250,0" Width="75" Height="30" />
+            <Button Content="Submit" Click="SubmitButton_Click" Width="68" Height="30" Margin="0,45,0,0" />
+        </StackPanel>
+    </Grid>
+</Window>

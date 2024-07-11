@@ -1,0 +1,79 @@
+﻿<Window x:Class="ProjectPRN.FrmAdmin"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ProjectPRN"
+        mc:Ignorable="d"
+        Title="FrmAdmin" Height="650" Width="1000">
+    <Window.Resources>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Width" Value="80"/>
+            <Setter Property="Background" Value="#e67e22"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="0,20,539,0">
+                <WrapPanel>
+                    <Button Style="{StaticResource ButtonStyle}" Width="20" Content="↩️" FontSize="20" Click="Button_Click_5" Margin="10,-15,0,0"/>
+                    <Label Content="Danh sách câu hỏi" Foreground="Blue" FontSize="40" FontFamily="Times New Roman" FontWeight="Bold" Margin="25,-15,0,0"/>
+                    <TextBox x:Name="txtID" FontSize="20"  Width="50" TextWrapping="Wrap" AcceptsReturn="True" IsReadOnlyCaretVisible="True" Visibility="Hidden"/>
+                </WrapPanel>
+
+                <WrapPanel Margin="5,0,0,0">
+                    <Button Style="{StaticResource ButtonStyle}" FontSize="20" Content="🔍" Click="Button_Click_4" Margin="310,0,0,10"/>
+                    <Label Content="QuestionPrompt" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Padding="5,5,5,5" Margin="0,-37,0,0"/>
+                    <TextBox x:Name="txtQPrompt" FontSize="20" HorizontalAlignment="Center" Width="400" TextWrapping="Wrap" AcceptsReturn="True"/>
+                </WrapPanel>
+
+                <WrapPanel Margin="5,20,0,0">
+                    <Label Content="QuestionContent" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Padding="5,5,5,5"/>
+                    <TextBox x:Name="txtQContent" FontSize="20" HorizontalAlignment="Center" Width="400" TextWrapping="Wrap" AcceptsReturn="True" Margin="5,0,0,0"/>
+                </WrapPanel>
+
+                <WrapPanel Margin="5,25,0,0">
+                    <Label Content="Answer1" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Padding="5,5,5,5"/>
+                    <TextBox x:Name="txtAnswer1" FontSize="20" HorizontalAlignment="Center" Width="300" TextWrapping="Wrap" AcceptsReturn="True"/>
+                </WrapPanel>
+                <WrapPanel Margin="5,25,0,0">
+                    <Label Content="Answer2" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Padding="5,5,5,5"/>
+                    <TextBox x:Name="txtAnswer2" FontSize="20" HorizontalAlignment="Center" Width="300" TextWrapping="Wrap" AcceptsReturn="True"/>
+                </WrapPanel>
+                <WrapPanel Margin="5,25,0,0">
+                    <Label Content="Answer3" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Padding="5,5,5,5"/>
+                    <TextBox x:Name="txtAnswer3" FontSize="20" HorizontalAlignment="Center" Width="300" TextWrapping="Wrap" AcceptsReturn="True"/>
+                </WrapPanel>
+                <WrapPanel Margin="5,25,0,0">
+                    <Label Content="Answer4" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Padding="5,5,5,5"/>
+                    <TextBox x:Name="txtAnswer4" FontSize="20" HorizontalAlignment="Center" Width="300" TextWrapping="Wrap" AcceptsReturn="True"/>
+                </WrapPanel>
+                <WrapPanel Margin="5,25,0,0">
+                    <Label Content="Result" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <ComboBox x:Name="cboResult" FontSize="20" HorizontalAlignment="Center" Width="300" Margin="23,0,0,0"/>
+                </WrapPanel>
+
+                <WrapPanel Margin="0,10,0,0">
+                    <Button Style="{StaticResource ButtonStyle}" Content="ADD" FontSize="20" Margin="10,0,30,0" Click="Button_Click" Padding="31,10,10,10"/>
+                    <Button Style="{StaticResource ButtonStyle}" Content="UPDATE" FontSize="20" Margin="0,0,30,0" Click="Button_Click_2"/>
+                    <Button Style="{StaticResource ButtonStyle}" Content="DELETE" FontSize="20" Margin="0,0,30,0" Click="Button_Click_1"/>
+                    <Button Style="{StaticResource ButtonStyle}" Content="EXAM" FontSize="20" Click="Button_Click_3"/>
+                </WrapPanel>
+            </StackPanel>
+        </ScrollViewer>
+        <DataGrid x:Name="dgQuestion" SelectionChanged="dgQuestion_SelectionChanged" Margin="430,0,0,0"/>
+    </Grid>
+</Window>
