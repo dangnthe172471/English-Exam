@@ -6,8 +6,31 @@
         xmlns:local="clr-namespace:ProjectPRN"
         mc:Ignorable="d"
         Title="FrmExamResults" Height="400" Width="800">
+    <Window.Resources>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Width" Value="80"/>
+            <Setter Property="Height" Value="38"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="20"/>
+            <Setter Property="Background" Value="Orange"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Grid>
-        <DataGrid x:Name="ResultDataGrid" AutoGenerateColumns="False" Margin="0,63,0,5" ColumnWidth="*">
+        <DataGrid x:Name="ResultDataGrid" AutoGenerateColumns="False" Margin="0,58,0,0" ColumnWidth="*" MouseDoubleClick="ResultDataGrid_MouseDoubleClick">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="STT" Binding="{Binding STT}" />
                 <DataGridTextColumn Header="QuestionPropmt" Binding="{Binding QuestionPropmt}" />
@@ -17,7 +40,7 @@
                 <DataGridTextColumn Header="Result" Binding="{Binding Result}" />
             </DataGrid.Columns>
         </DataGrid>
-        <WrapPanel Margin="0,0,0,326">
+        <WrapPanel Margin="0,0,0,303">
             <Label Content="Điểm của bạn: " FontSize="20" Margin="125,0,0,0"/>
             <TextBlock Text="{Binding TotalScore}" FontSize="18" FontWeight="Bold" Margin="0,8,0,0" />
             <TextBlock Text=" (" FontSize="18" FontWeight="Bold" Margin="0,8,0,0" />
@@ -25,7 +48,7 @@
             <TextBlock Text="/" FontSize="18" FontWeight="Bold" Margin="0,8,0,0" />
             <TextBlock x:Name="txtTotal" FontSize="18" FontWeight="Bold" Margin="0,8,0,0" />
             <TextBlock Text=")" FontSize="18" FontWeight="Bold" Margin="0,8,0,0" />
-            <Button Content="Thoát" Margin="300,0,0,0" Click="Button_Click"/>
+            <Button Style="{StaticResource ButtonStyle}" Content="Thoát" Margin="250,5,0,0" Click="Button_Click"/>
         </WrapPanel>
     </Grid>
 </Window>

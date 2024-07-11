@@ -89,5 +89,10 @@ namespace ProjectPRN
             fu.Show();
             this.Close();
         }
+
+        private void ResultDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }

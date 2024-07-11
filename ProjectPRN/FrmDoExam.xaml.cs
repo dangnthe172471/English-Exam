@@ -120,11 +120,17 @@ namespace ProjectPRN
         private void PreviousButton_Click(object sender, RoutedEventArgs e)
         {
             SaveSelectedAnswer();
-            if (currentQuestionIndex > 0)
+            if (currentQuestionIndex == 0)
+            {
+                currentQuestionIndex = questions.Count - 1;
+                DisplayQuestion(currentQuestionIndex);
+            }
+            else if (currentQuestionIndex > 0)
             {
                 currentQuestionIndex--;
                 DisplayQuestion(currentQuestionIndex);
             }
+
         }
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
@@ -133,6 +139,11 @@ namespace ProjectPRN
             if (currentQuestionIndex < questions.Count - 1)
             {
                 currentQuestionIndex++;
+                DisplayQuestion(currentQuestionIndex);
+            }
+            else if (currentQuestionIndex == questions.Count - 1)
+            {
+                currentQuestionIndex = 0;
                 DisplayQuestion(currentQuestionIndex);
             }
         }

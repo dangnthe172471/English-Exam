@@ -6,6 +6,23 @@
         xmlns:local="clr-namespace:ProjectPRN"
         mc:Ignorable="d"
         Title="FrmExam" Height="630" Width="800">
+    <Window.Resources>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Orange"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="513*"/>
@@ -37,10 +54,10 @@
                 <Button Content="Tạo đề thi" FontSize="16" Click="CreateManualExam_Click" Margin="10"/>
             </StackPanel>
         </StackPanel>
-        <Button Content="Xóa đề thi" FontSize="20" HorizontalAlignment="Left" Margin="223,17,0,0" VerticalAlignment="Top" Click="Button_Click" Grid.Column="1"/>
+        <Button Style="{StaticResource ButtonStyle}" Content="Xóa đề thi" FontSize="20" HorizontalAlignment="Left" Margin="225,10,0,0" VerticalAlignment="Top" Click="Button_Click" Grid.Column="1" Width="115" Height="35"/>
         <TextBox x:Name="txtID" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="340,390,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Visibility="Hidden"/>
-        <Button Content="Quay lại" FontSize="20" HorizontalAlignment="Left" Margin="32,10,0,0" VerticalAlignment="Top" Click="Button_Click_1"/>
-        <Button FontSize="20" Content="🔍" HorizontalAlignment="Left" Margin="261,384,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.019,0.328" Click="Button_Click_2"/>
+        <Button Style="{StaticResource ButtonStyle}" Content="Quay lại" FontSize="20" HorizontalAlignment="Left" Margin="30,10,0,0" VerticalAlignment="Top" Click="Button_Click_1" Width="100" Height="35"/>
+        <Button FontSize="20" Style="{StaticResource ButtonStyle}" Content="🔍" HorizontalAlignment="Left" Margin="262,383,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.019,0.328" Click="Button_Click_2"/>
         <TextBox x:Name="txtSearch" FontSize="20" HorizontalAlignment="Left" Margin="294,383,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" Grid.ColumnSpan="2"/>
     </Grid>
 </Window>
