@@ -31,6 +31,11 @@ namespace ProjectPRN
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrEmpty(txtUser.Text)||string.IsNullOrEmpty(txtPass.Password))
+            {
+                MessageBox.Show("Vui long nhap du thong tin");
+                return;
+            }
             // tìm xem có user nào mà account == txtAccount và password == txtPassword hay không ?
             var user = context.Accounts.FirstOrDefault(a => a.User.Equals(txtUser.Text) && a.Pass.Equals(txtPass.Password));
             if (user!=null)
