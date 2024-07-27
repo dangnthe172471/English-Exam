@@ -42,7 +42,7 @@ GO
 CREATE TABLE [dbo].[Exam] (
     [id] INT IDENTITY(1,1) PRIMARY KEY,
     [name] NVARCHAR(MAX) NOT NULL,
-    [Date] DATE NOT NULL,
+    [Date] NVARCHAR(MAX) NOT NULL,
     [numQuestion] INT NOT NULL,
     [timeline] NVARCHAR(MAX) NOT NULL
 );
@@ -62,8 +62,9 @@ CREATE TABLE [dbo].[Score] (
     [id] INT IDENTITY(1,1) PRIMARY KEY,
     [accountId] INT NOT NULL,
     [examId] INT NOT NULL,
-    [date] DATE NOT NULL,
+    [date] NVARCHAR(MAX) NOT NULL,
     [mark] FLOAT NOT NULL,
+	[solan] INT default 1,
     FOREIGN KEY ([accountId]) REFERENCES [dbo].[Account]([id]),
     FOREIGN KEY ([examId]) REFERENCES [dbo].[Exam]([id])
 );
@@ -75,9 +76,10 @@ CREATE TABLE [dbo].[UserAnswers] (
     [examId] INT NOT NULL,
     [questionId] INT NOT NULL,
     [selectedAnswer] NVARCHAR(MAX) NOT NULL,
+	[solan] int default 1,
     FOREIGN KEY ([accountId]) REFERENCES [dbo].[Account]([id]),
     FOREIGN KEY ([examId]) REFERENCES [dbo].[Exam]([id]),
-    FOREIGN KEY ([questionId]) REFERENCES [dbo].[Question]([id])
+    FOREIGN KEY ([questionId]) REFERENCES [dbo].[Question]([id]),
 );
 GO
 SET IDENTITY_INSERT [dbo].[Account] ON 

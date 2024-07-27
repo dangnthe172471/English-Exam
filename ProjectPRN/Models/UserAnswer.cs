@@ -15,6 +15,8 @@ public partial class UserAnswer
 
     public string SelectedAnswer { get; set; } = null!;
 
+    public int? Solan { get; set; }
+
     public virtual Account Account { get; set; } = null!;
 
     public virtual Exam Exam { get; set; } = null!;

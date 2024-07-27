@@ -35,7 +35,7 @@ public partial class ProjectPrnContext : DbContext
     {
         modelBuilder.Entity<Account>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Account__3213E83FB278C0B2");
+            entity.HasKey(e => e.Id).HasName("PK__Account__3213E83FD8C05D71");
 
             entity.ToTable("Account");
 
@@ -61,7 +61,7 @@ public partial class ProjectPrnContext : DbContext
 
         modelBuilder.Entity<Exam>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Exam__3213E83F3B23D301");
+            entity.HasKey(e => e.Id).HasName("PK__Exam__3213E83FAC9F5470");
 
             entity.ToTable("Exam");
 
@@ -73,7 +73,7 @@ public partial class ProjectPrnContext : DbContext
 
         modelBuilder.Entity<ExamQuestion>(entity =>
         {
-            entity.HasKey(e => new { e.Id, e.ExamId, e.QuestionId }).HasName("PK__ExamQues__FD897A4C5D1F8A12");
+            entity.HasKey(e => new { e.Id, e.ExamId, e.QuestionId }).HasName("PK__ExamQues__FD897A4C3292BE98");
 
             entity.Property(e => e.Id)
                 .ValueGeneratedOnAdd()
@@ -92,7 +92,7 @@ public partial class ProjectPrnContext : DbContext
 
         modelBuilder.Entity<Question>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Question__3213E83F5A01B245");
+            entity.HasKey(e => e.Id).HasName("PK__Question__3213E83F6F1F249F");
 
             entity.ToTable("Question");
 
@@ -109,7 +109,7 @@ public partial class ProjectPrnContext : DbContext
 
         modelBuilder.Entity<Score>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Score__3213E83FD2DC5E33");
+            entity.HasKey(e => e.Id).HasName("PK__Score__3213E83F84E88E48");
 
             entity.ToTable("Score");
 
@@ -118,42 +118,48 @@ public partial class ProjectPrnContext : DbContext
             entity.Property(e => e.Date).HasColumnName("date");
             entity.Property(e => e.ExamId).HasColumnName("examId");
             entity.Property(e => e.Mark).HasColumnName("mark");
+            entity.Property(e => e.Solan)
+                .HasDefaultValue(1)
+                .HasColumnName("solan");
 
             entity.HasOne(d => d.Account).WithMany(p => p.Scores)
                 .HasForeignKey(d => d.AccountId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Score__accountId__4222D4EF");
+                .HasConstraintName("FK__Score__accountId__4316F928");
 
             entity.HasOne(d => d.Exam).WithMany(p => p.Scores)
                 .HasForeignKey(d => d.ExamId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Score__examId__4316F928");
+                .HasConstraintName("FK__Score__examId__440B1D61");
         });
 
         modelBuilder.Entity<UserAnswer>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__UserAnsw__3213E83F3C3305AE");
+            entity.HasKey(e => e.Id).HasName("PK__UserAnsw__3213E83FEA46D394");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.AccountId).HasColumnName("accountId");
             entity.Property(e => e.ExamId).HasColumnName("examId");
             entity.Property(e => e.QuestionId).HasColumnName("questionId");
             entity.Property(e => e.SelectedAnswer).HasColumnName("selectedAnswer");
+            entity.Property(e => e.Solan)
+                .HasDefaultValue(1)
+                .HasColumnName("solan");
 
             entity.HasOne(d => d.Account).WithMany(p => p.UserAnswers)
                 .HasForeignKey(d => d.AccountId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__UserAnswe__accou__45F365D3");
+                .HasConstraintName("FK__UserAnswe__accou__47DBAE45");
 
             entity.HasOne(d => d.Exam).WithMany(p => p.UserAnswers)
                 .HasForeignKey(d => d.ExamId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__UserAnswe__examI__46E78A0C");
+                .HasConstraintName("FK__UserAnswe__examI__48CFD27E");
 
             entity.HasOne(d => d.Question).WithMany(p => p.UserAnswers)
                 .HasForeignKey(d => d.QuestionId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__UserAnswe__quest__47DBAE45");
+                .HasConstraintName("FK__UserAnswe__quest__49C3F6B7");
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -9,7 +9,7 @@ public partial class Exam
 
     public string Name { get; set; } = null!;
 
-    public DateOnly Date { get; set; }
+    public string Date { get; set; } = null!;
 
     public int NumQuestion { get; set; }
 

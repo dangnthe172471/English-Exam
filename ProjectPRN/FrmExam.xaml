@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProjectPRN"
         mc:Ignorable="d"
-        Title="FrmExam" Height="630" Width="800">
+        Title="FrmExam" Height="700" Width="800">
     <Window.Resources>
         <Style x:Key="ButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Orange"/>
@@ -28,15 +28,16 @@
             <ColumnDefinition Width="513*"/>
             <ColumnDefinition Width="487*"/>
         </Grid.ColumnDefinitions>
-        <ListBox x:Name="lbQuestions" SelectionMode="Multiple" Margin="10,58,10,236" Grid.ColumnSpan="2" />
+        <ListBox x:Name="lbQuestions" SelectionMode="Multiple" Margin="10,58,15,312" />
+        <ListBox x:Name="lbQuestions1" SelectionMode="Multiple" Margin="400,58,10,312" Grid.ColumnSpan="2" />
 
-        <DataGrid x:Name="dgExam" Height="180" Margin="10,416,340,18" SelectionChanged="dgExam_SelectionChanged" Grid.ColumnSpan="2" ColumnWidth="*"/>
+        <DataGrid x:Name="dgExam" Margin="10,419,340,19" SelectionChanged="dgExam_SelectionChanged" Grid.ColumnSpan="2" ColumnWidth="*"/>
 
         <Label Content="Câu hỏi" FontSize="38" FontWeight="Bold" HorizontalAlignment="Left" Margin="334,0,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.705,1.069" MouseDoubleClick="Label_MouseDoubleClick" Grid.ColumnSpan="2"/>
         <Label Content="Danh sách đề" FontSize="28" FontWeight="Bold" Margin="7,372,111,0" VerticalAlignment="Top" RenderTransformOrigin="-0.048,0.136"/>
-        <StackPanel Margin="66,368,10,10" Grid.Column="1">
-            <RadioButton x:Name="rbRandom" Content="Random câu hỏi" FontSize="16" GroupName="SelectionMethod" Margin="10" Checked="SelectionMethod_Checked"/>
-            <RadioButton x:Name="rbManual" Content="Tạo đề theo các câu hỏi được chọn" FontSize="16"  GroupName="SelectionMethod" Margin="10" Checked="SelectionMethod_Checked"/>
+        <StackPanel Margin="66,437,10,10" Grid.Column="1">
+            <RadioButton x:Name="rbRandom" Content="Random câu hỏi" FontSize="16" GroupName="SelectionMethod" Margin="10" Checked="SelectionMethod_Checked" VerticalContentAlignment="Center"/>
+            <RadioButton x:Name="rbManual" Content="Tạo đề theo các câu hỏi được chọn" FontSize="16"  GroupName="SelectionMethod" Margin="10" Checked="SelectionMethod_Checked" VerticalContentAlignment="Center"/>
 
             <!-- Random Selection Panel -->
             <StackPanel x:Name="randomPanel" Visibility="Collapsed">
@@ -54,10 +55,15 @@
                 <Button Content="Tạo đề thi" FontSize="16" Click="CreateManualExam_Click" Margin="10"/>
             </StackPanel>
         </StackPanel>
-        <Button Style="{StaticResource ButtonStyle}" Content="Xóa đề thi" FontSize="20" HorizontalAlignment="Left" Margin="225,10,0,0" VerticalAlignment="Top" Click="Button_Click" Grid.Column="1" Width="115" Height="35"/>
-        <TextBox x:Name="txtID" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="340,390,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Visibility="Hidden"/>
+        <Button Style="{StaticResource ButtonStyle}" Content="🗑️" FontSize="20" HorizontalAlignment="Left" Margin="410,384,0,0" VerticalAlignment="Top" Click="Button_Click" Width="40" Height="30" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="txtID" HorizontalAlignment="Left" Margin="168,419,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Column="1" Visibility="Hidden"/>
         <Button Style="{StaticResource ButtonStyle}" Content="Quay lại" FontSize="20" HorizontalAlignment="Left" Margin="30,10,0,0" VerticalAlignment="Top" Click="Button_Click_1" Width="100" Height="35"/>
-        <Button FontSize="20" Style="{StaticResource ButtonStyle}" Content="🔍" HorizontalAlignment="Left" Margin="262,383,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.019,0.328" Click="Button_Click_2"/>
-        <TextBox x:Name="txtSearch" FontSize="20" HorizontalAlignment="Left" Margin="294,383,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" Grid.ColumnSpan="2"/>
+        <Button FontSize="20" Style="{StaticResource ButtonStyle}" Content="🔍" HorizontalAlignment="Left" Margin="214,384,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.019,0.328" Click="Button_Click_2"  Width="40" Height="30"/>
+        <TextBox x:Name="txtSearch" FontSize="20" HorizontalAlignment="Left" Margin="255,385,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140"/>
+        <WrapPanel Margin="66,384,0,0" Grid.Column="1">
+            <Button Style="{StaticResource ButtonStyle}" FontSize="20" Margin="10,0,0,0" Click="Button_Click_3">Xóa câu hỏi</Button>
+            <Button Style="{StaticResource ButtonStyle}" FontSize="20" Margin="68,0,0,0" Click="Button_Click_4">Thêm câu hỏi</Button>
+        </WrapPanel>
+
     </Grid>
 </Window>

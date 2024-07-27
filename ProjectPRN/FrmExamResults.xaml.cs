@@ -31,15 +31,17 @@ namespace ProjectPRN
 
         private int accountId;
         private int examId;
+        private int solan;
 
         private ProjectPrnContext context = new ProjectPrnContext();
 
-        public FrmExamResults(int accountId, int examId, string name)
+        public FrmExamResults(int accountId, int examId, string name, int solan)
         {
             InitializeComponent();
             this.accountId = accountId;
             this.examId = examId;
             this.name = name;
+            this.solan = solan;
             Title = "Hello " + name;
             ShowResult();
         }
@@ -47,7 +49,7 @@ namespace ProjectPRN
         private void ShowResult()
         {
             var userAnswers = context.UserAnswers
-                                    .Where(ua => ua.AccountId == accountId && ua.ExamId == examId)
+                                    .Where(ua => ua.AccountId == accountId && ua.ExamId == examId && ua.Solan==solan )
                                     .ToList();
 
             var resultView = new List<Object>();

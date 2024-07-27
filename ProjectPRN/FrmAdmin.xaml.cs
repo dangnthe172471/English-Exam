@@ -53,7 +53,6 @@ namespace ProjectPRN
             dgQuestion.ItemsSource = data;
             var data2 = context.Questions.Select(q => q.ResultNum).Distinct().ToArray();
             cboResult.ItemsSource = data2;
-
         }
         private void dgQuestion_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -106,7 +105,7 @@ namespace ProjectPRN
         {
             if (String.IsNullOrEmpty(txtID.Text))
             {
-                MessageBox.Show("câu hỏi không tồn tại!");
+                MessageBox.Show("Vui lòng chọn câu hỏi!");
             }
             else
             {
@@ -122,7 +121,13 @@ namespace ProjectPRN
         {
             if (String.IsNullOrEmpty(txtID.Text))
             {
-                MessageBox.Show("câu hỏi không tồn tại!");
+                MessageBox.Show("Vui lòng chọn câu hỏi!");
+                return;
+            }
+            if (String.IsNullOrEmpty(txtQPrompt.Text) || String.IsNullOrEmpty(txtQContent.Text) || String.IsNullOrEmpty(txtAnswer1.Text) || String.IsNullOrEmpty(txtAnswer2.Text) || String.IsNullOrEmpty(txtAnswer3.Text) || String.IsNullOrEmpty(txtAnswer4.Text) || String.IsNullOrEmpty(cboResult.Text))
+            {
+                MessageBox.Show("Vui lòng nhập đầy đủ thông tin!");
+                return;
             }
             else
             {
@@ -149,6 +154,11 @@ namespace ProjectPRN
 
         private void Button_Click_4(object sender, RoutedEventArgs e)
         {
+            if(string.IsNullOrEmpty(txtQContent.Text)&&string.IsNullOrEmpty(txtQPrompt.Text))
+            {
+                MessageBox.Show("Vui lòng nhập nội dung câu hỏi hoặc yêu cầu câu hỏi để tìm kiếm!");
+                return;
+            }
             if (String.IsNullOrEmpty(txtQContent.Text))
             {
                 var data = context.Questions.Where(q => q.QuestionPrompt.Contains(txtQPrompt.Text)).Select(q =>
@@ -202,7 +212,7 @@ namespace ProjectPRN
 
         private void Button_Click_5(object sender, RoutedEventArgs e)
         {
-            MainWindow main=new MainWindow();
+            MainWindow main = new MainWindow();
             main.Show();
             this.Close();
         }

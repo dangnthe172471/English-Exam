@@ -31,7 +31,7 @@
             <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
 
-        <ListBox x:Name="ExamListBox" DisplayMemberPath="Name" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,45,533,0"/>
+        <ListBox x:Name="ExamListBox" DisplayMemberPath="Name" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,45,533,0" />
 
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>

@@ -11,9 +11,11 @@ public partial class Score
 
     public int ExamId { get; set; }
 
-    public DateOnly Date { get; set; }
+    public string Date { get; set; } = null!;
 
     public double Mark { get; set; }
+
+    public int? Solan { get; set; }
 
     public virtual Account Account { get; set; } = null!;
 

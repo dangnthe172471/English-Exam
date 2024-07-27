@@ -1,4 +1,5 @@
-﻿using ProjectPRN.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using ProjectPRN.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,9 +54,7 @@ namespace ProjectPRN
                                         .ToList();
 
                 // Lọc ra những kỳ thi mà người dùng chưa thi
-                var examsNotTaken = allExams
-                                    .Where(e => !takenExams.Contains(e.Id))
-                                    .ToList();
+                var examsNotTaken = allExams.Where(e => !takenExams.Contains(e.Id)).ToList();
 
                 // Hiển thị danh sách kỳ thi chưa thi trong ListBox
                 ExamListBox.ItemsSource = examsNotTaken;
@@ -67,7 +66,8 @@ namespace ProjectPRN
                                     {
                                         ExamName = context.Exams.FirstOrDefault(e => e.Id == s.ExamId).Name,
                                         ExamDate = s.Date,
-                                        ExamScore = Math.Round(s.Mark, 2)
+                                        ExamScore = Math.Round(s.Mark, 2),
+                                        LanThi = s.Solan,
                                     })
                                     .ToList();
 
@@ -104,14 +104,44 @@ namespace ProjectPRN
                     examWindow.Show();
                     this.Close();
                 }
-                else
+
+                var selectExam1 = HistoryDataGrid.SelectedItem as dynamic;
+                string name = selectExam1.ExamName;
+               
+                var exam = context.Exams.FirstOrDefault(ex => ex.Name.Equals(name));
+                var user = context.Accounts.FirstOrDefault(a => a.User.Equals(name));
+
+                int solan = Convert.ToInt32(selectExam1.LanThi);
+                if (solan == 2)
                 {
-                    MessageBox.Show("Vui lòng chọn bài thi để thi.");
+                    MessageBox.Show("ban da lam 2 lan");
+                    return;
                 }
+
+                if (selectExam1 != null)
+                {
+                    // Lấy danh sách QuestionId từ bảng ExamQuestions
+                    var questionIds1 = context.ExamQuestions
+                                            .Where(eq => eq.ExamId == exam.Id)
+                                            .Select(eq => eq.QuestionId)
+                                            .ToList();
+
+                    // Lấy danh sách các câu hỏi từ bảng Question
+                    var questions1 = context.Questions
+                                            .Where(q => questionIds1.Contains(q.Id))
+                                            .ToList();
+
+                    double timeLine1 = questions1.Count / 2.0;
+                    var examDuration1 = TimeSpan.FromMinutes(timeLine1); // Ví dụ: thời gian tính theo phút 30s 1 câu
+
+                    var examWindow1 = new FrmDoExam(questions1, examDuration1, this.name, exam.Id);
+                    examWindow1.Show();
+                    this.Close();
+                }
+
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error starting exam: {ex.Message}");
             }
         }
 
@@ -128,11 +158,12 @@ namespace ProjectPRN
             {
                 var selectedScore = HistoryDataGrid.SelectedItem as dynamic;
                 string exName = selectedScore.ExamName;
+                int solan = Convert.ToInt32(selectedScore.LanThi);
                 if (selectedScore != null && selectedScore.ExamName != null)
                 {
                     var user = context.Accounts.FirstOrDefault(a => a.User.Equals(this.name));
                     var exam = context.Exams.FirstOrDefault(ex => ex.Name.Equals(exName));
-                    FrmExamResults resultWindow = new FrmExamResults(user.Id, exam.Id, this.name);
+                    FrmExamResults resultWindow = new FrmExamResults(user.Id, exam.Id, this.name, solan);
                     resultWindow.Show();
                     this.Close();
                 }

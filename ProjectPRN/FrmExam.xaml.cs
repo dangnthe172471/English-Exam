@@ -61,6 +61,7 @@ namespace ProjectPRN
                 Time = e.Timeline,
             }).ToList();
             dgExam.ItemsSource = data2;
+            lbQuestions1.ItemsSource = null;
         }
 
         private void SelectionMethod_Checked(object sender, RoutedEventArgs e)
@@ -92,9 +93,9 @@ namespace ProjectPRN
             }
             if (int.TryParse(txtRandomCount.Text, out int questionCount))
             {
-                if (questionCount > (context.Questions.ToList()).Count)
+                if (questionCount > (context.Questions.ToList()).Count || questionCount < 1)
                 {
-                    MessageBox.Show("Số câu hỏi random phải nhỏ hơn tổng số câu hỏi: " + (context.Questions.ToList()).Count);
+                    MessageBox.Show("Số câu hỏi random phải từ 1 đến " + (context.Questions.ToList()).Count + " câu hỏi!");
                     return;
                 }
                 var randomQuestions = context.Questions.OrderBy(q => Guid.NewGuid()).Take(questionCount).ToList();
@@ -102,7 +103,7 @@ namespace ProjectPRN
                 var newExam = new Exam
                 {
                     Name = txtNameExam.Text,
-                    Date = DateOnly.FromDateTime(DateTime.Now),
+                    Date = DateTime.Now.ToString(),
                     NumQuestion = questionCount,
                     Timeline = timeLine.ToString(),
                 };
@@ -150,7 +151,7 @@ namespace ProjectPRN
             var newExam = new Exam
             {
                 Name = txtNameExam1.Text,
-                Date = DateOnly.FromDateTime(DateTime.Now),
+                Date = DateTime.Now.ToString(),
                 NumQuestion = selectedQuestions.Count,
                 Timeline = timeLine.ToString(),
             };
@@ -183,7 +184,8 @@ namespace ProjectPRN
             {
                 int id = exam.ID;
                 txtID.Text = id.ToString();
-                var data = context.Questions
+                var data = context.Questions.ToList();
+                var data1 = context.Questions
                .Where(q => q.ExamQuestions.Any(eq => eq.ExamId == id)).Select(q => new
                {
                    ID = q.Id,
@@ -195,7 +197,22 @@ namespace ProjectPRN
                    Answer4 = q.Answers4,
                    Result = q.ResultNum,
                }).ToList();
-                lbQuestions.ItemsSource = data;
+                lbQuestions1.ItemsSource = data1;
+
+                var data2 = context.Questions
+             .Where(q => !q.ExamQuestions.Any(eq => eq.ExamId == id)).Select(q => new
+             {
+                 ID = q.Id,
+                 QuestionPrompt = q.QuestionPrompt,
+                 QuestionContent = q.Content,
+                 Answer1 = q.Answers1,
+                 Answer2 = q.Answers2,
+                 Answer3 = q.Answers3,
+                 Answer4 = q.Answers4,
+                 Result = q.ResultNum,
+             }).ToList();
+                lbQuestions.ItemsSource = data2;
+
             }
             else
             {
@@ -240,14 +257,14 @@ namespace ProjectPRN
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            FrmAdmin ad= new FrmAdmin(this.name);
+            FrmAdmin ad = new FrmAdmin(this.name);
             ad.Show();
             this.Close();
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            var data2 = context.Exams.Where(ex=>ex.Name.Contains(txtSearch.Text)).Select(e =>
+            var data2 = context.Exams.Where(ex => ex.Name.Contains(txtSearch.Text)).Select(e =>
             new
             {
                 ID = e.Id,
@@ -257,6 +274,176 @@ namespace ProjectPRN
                 Time = e.Timeline,
             }).ToList();
             dgExam.ItemsSource = data2;
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtID.Text))
+            {
+                MessageBox.Show("Vui lòng chọn đề thi!");
+                return;
+            }
+
+            int id = Convert.ToInt32(txtID.Text);
+
+            var selectedQuestions = lbQuestions1.SelectedItems.Cast<dynamic>().Select(ex => ex.ID).ToList();
+            if (selectedQuestions.Count == 0)
+            {
+                MessageBox.Show("Vui lòng chọn câu hỏi muốn xóa!(ở bảng 2)");
+                return;
+            }
+
+            var examQuestion = context.ExamQuestions.Where(eq => eq.ExamId == id).ToList();
+
+            // Tạo danh sách các câu hỏi cần xóa
+            var questionsToRemove = examQuestion.Where(eq => selectedQuestions.Contains(eq.QuestionId)).ToList();
+
+            // Tạo danh sách các câu hỏi còn lại
+            var remainingQuestions = examQuestion.Where(eq => !selectedQuestions.Contains(eq.QuestionId)).ToList();
+            if (remainingQuestions.Count == 0)
+            {
+                if (MessageBox.Show("Bạn có chắc muốn xóa toàn bộ câu hỏi trong đề(sẽ xóa đề thi)?", "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    Button_Click(sender, e);
+                    return;
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            // Xóa các câu hỏi cần xóa
+            context.ExamQuestions.RemoveRange(questionsToRemove);
+            context.SaveChanges();
+
+            double timeLine = remainingQuestions.Count() / 2.0;
+
+            var exam = context.Exams.FirstOrDefault(ex => ex.Id == id);
+            exam.Timeline = timeLine.ToString();
+            exam.NumQuestion = remainingQuestions.Count();
+            context.SaveChanges();
+
+            var data3 = context.Exams.Select(e =>
+           new
+           {
+               ID = e.Id,
+               Name = e.Name,
+               Date = e.Date,
+               NumQuestion = e.NumQuestion,
+               Time = e.Timeline,
+           }).ToList();
+            dgExam.ItemsSource = data3;
+            var data = context.Questions.ToList();
+            var data1 = context.Questions
+           .Where(q => q.ExamQuestions.Any(eq => eq.ExamId == id)).Select(q => new
+           {
+               ID = q.Id,
+               QuestionPrompt = q.QuestionPrompt,
+               QuestionContent = q.Content,
+               Answer1 = q.Answers1,
+               Answer2 = q.Answers2,
+               Answer3 = q.Answers3,
+               Answer4 = q.Answers4,
+               Result = q.ResultNum,
+           }).ToList();
+            lbQuestions1.ItemsSource = data1;
+
+            var data2 = context.Questions
+         .Where(q => !q.ExamQuestions.Any(eq => eq.ExamId == id)).Select(q => new
+         {
+             ID = q.Id,
+             QuestionPrompt = q.QuestionPrompt,
+             QuestionContent = q.Content,
+             Answer1 = q.Answers1,
+             Answer2 = q.Answers2,
+             Answer3 = q.Answers3,
+             Answer4 = q.Answers4,
+             Result = q.ResultNum,
+         }).ToList();
+            lbQuestions.ItemsSource = data2;
+
+            MessageBox.Show("Xóa câu hỏi trong đề thành công!");
+        }
+
+        private void Button_Click_4(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtID.Text))
+            {
+                MessageBox.Show("Vui lòng chọn đề thi!");
+                return;
+            }
+
+            int id = Convert.ToInt32(txtID.Text);
+
+            var selectedQuestions = lbQuestions.SelectedItems.Cast<dynamic>().Select(ex => ex.ID).ToList();
+            if (selectedQuestions.Count == 0)
+            {
+                MessageBox.Show("Vui lòng chọn câu hỏi muốn thêm!(ở bảng 1)");
+                return;
+            }
+            var examQuestion = context.ExamQuestions.Where(eq => eq.ExamId == id).ToList();
+
+            // Tạo danh sách các câu hỏi cần add
+            var questionsToAdd = selectedQuestions.Where(sq => !examQuestion.Any(eq => eq.QuestionId == sq)).Select(sq => new ExamQuestion
+            {
+                ExamId = id,
+                QuestionId = sq
+            }).ToList();
+
+            // Xóa các câu hỏi cần add
+            context.ExamQuestions.AddRange(questionsToAdd);
+            context.SaveChanges();
+
+            examQuestion = context.ExamQuestions.Where(eq => eq.ExamId == id).ToList();
+            double timeLine = examQuestion.Count() / 2.0;
+
+            var exam = context.Exams.FirstOrDefault(ex => ex.Id == id);
+            exam.Timeline = timeLine.ToString();
+            exam.NumQuestion = examQuestion.Count();
+            context.SaveChanges();
+
+            var data3 = context.Exams.Select(e =>
+           new
+           {
+               ID = e.Id,
+               Name = e.Name,
+               Date = e.Date,
+               NumQuestion = e.NumQuestion,
+               Time = e.Timeline,
+           }).ToList();
+            dgExam.ItemsSource = data3;
+            var data = context.Questions.ToList();
+            var data1 = context.Questions
+           .Where(q => q.ExamQuestions.Any(eq => eq.ExamId == id)).Select(q => new
+           {
+               ID = q.Id,
+               QuestionPrompt = q.QuestionPrompt,
+               QuestionContent = q.Content,
+               Answer1 = q.Answers1,
+               Answer2 = q.Answers2,
+               Answer3 = q.Answers3,
+               Answer4 = q.Answers4,
+               Result = q.ResultNum,
+           }).ToList();
+            lbQuestions1.ItemsSource = data1;
+
+            var data2 = context.Questions
+         .Where(q => !q.ExamQuestions.Any(eq => eq.ExamId == id)).Select(q => new
+         {
+             ID = q.Id,
+             QuestionPrompt = q.QuestionPrompt,
+             QuestionContent = q.Content,
+             Answer1 = q.Answers1,
+             Answer2 = q.Answers2,
+             Answer3 = q.Answers3,
+             Answer4 = q.Answers4,
+             Result = q.ResultNum,
+         }).ToList();
+            lbQuestions.ItemsSource = data2;
+
+            MessageBox.Show("Thêm câu hỏi vào đề thành công!");
+
         }
     }
 }
