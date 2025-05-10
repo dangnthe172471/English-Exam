@@ -1,18 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ProjectPRN.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ProjectPRN.Models;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace ProjectPRN
 {
@@ -84,6 +73,10 @@ namespace ProjectPRN
             try
             {
                 var selectedExam = (Exam)ExamListBox.SelectedItem;
+
+                var selectExamDone = HistoryDataGrid.SelectedItem as dynamic;
+
+
                 if (selectedExam != null)
                 {
                     // Lấy danh sách QuestionId từ bảng ExamQuestions
@@ -103,42 +96,53 @@ namespace ProjectPRN
                     var examWindow = new FrmDoExam(questions, examDuration, this.name, selectedExam.Id);
                     examWindow.Show();
                     this.Close();
-                }
-
-                var selectExam1 = HistoryDataGrid.SelectedItem as dynamic;
-                string name = selectExam1.ExamName;
-               
-                var exam = context.Exams.FirstOrDefault(ex => ex.Name.Equals(name));
-                var user = context.Accounts.FirstOrDefault(a => a.User.Equals(name));
-
-                int solan = Convert.ToInt32(selectExam1.LanThi);
-                if (solan == 2)
+                }           
+                else if (selectExamDone != null)
                 {
-                    MessageBox.Show("ban da lam 2 lan");
+                    string nameExam = selectExamDone.ExamName;
+                    var exam = context.Exams.FirstOrDefault(ex => ex.Name.Equals(nameExam));
+                    var user = context.Accounts.FirstOrDefault(a => a.User.Equals(this.name));
+
+                    //var examD = context.Scores.Where(sc => sc.ExamId == exam.Id && sc.AccountId == user.Id).OrderByDescending(sc => sc.Solan).FirstOrDefault();
+
+                    //int solan = 1;
+                    //if (examD != null)
+                    //{
+                    //    solan = (examD.Solan ?? 0) + 1;
+                    //}
+
+                    //if (solan >= 3)
+                    //{
+                    //    MessageBox.Show("ban da lam 2 lan roi");
+                    //    return;
+                    //}
+
+                    if (selectExamDone != null)
+                    {
+                        // Lấy danh sách QuestionId từ bảng ExamQuestions
+                        var questionIds1 = context.ExamQuestions
+                                                .Where(eq => eq.ExamId == exam.Id)
+                                                .Select(eq => eq.QuestionId)
+                                                .ToList();
+
+                        // Lấy danh sách các câu hỏi từ bảng Question
+                        var questions1 = context.Questions
+                                                .Where(q => questionIds1.Contains(q.Id))
+                                                .ToList();
+
+                        double timeLine1 = questions1.Count / 2.0;
+                        var examDuration1 = TimeSpan.FromMinutes(timeLine1); // Ví dụ: thời gian tính theo phút 30s 1 câu
+
+                        var examWindow1 = new FrmDoExam(questions1, examDuration1, this.name, exam.Id);
+                        examWindow1.Show();
+                        this.Close();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Vui lòng chọn bài thi để làm bài!");
                     return;
                 }
-
-                if (selectExam1 != null)
-                {
-                    // Lấy danh sách QuestionId từ bảng ExamQuestions
-                    var questionIds1 = context.ExamQuestions
-                                            .Where(eq => eq.ExamId == exam.Id)
-                                            .Select(eq => eq.QuestionId)
-                                            .ToList();
-
-                    // Lấy danh sách các câu hỏi từ bảng Question
-                    var questions1 = context.Questions
-                                            .Where(q => questionIds1.Contains(q.Id))
-                                            .ToList();
-
-                    double timeLine1 = questions1.Count / 2.0;
-                    var examDuration1 = TimeSpan.FromMinutes(timeLine1); // Ví dụ: thời gian tính theo phút 30s 1 câu
-
-                    var examWindow1 = new FrmDoExam(questions1, examDuration1, this.name, exam.Id);
-                    examWindow1.Show();
-                    this.Close();
-                }
-
             }
             catch (Exception ex)
             {
@@ -196,5 +200,23 @@ namespace ProjectPRN
                 e.Handled = true;
             }
         }
+        private void ExamListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ExamListBox.SelectedItem != null)
+            {
+                // Clear selection in the DataGrid
+                HistoryDataGrid.SelectedItem = null;
+            }
+        }
+
+        private void HistoryDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (HistoryDataGrid.SelectedItem != null)
+            {
+                // Clear selection in the ListBox
+                ExamListBox.SelectedItem = null;
+            }
+        }
+
     }
 }

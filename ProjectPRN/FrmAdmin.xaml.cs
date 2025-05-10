@@ -77,15 +77,23 @@ namespace ProjectPRN
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (String.IsNullOrEmpty(txtQPrompt.Text) || String.IsNullOrEmpty(txtQContent.Text) || String.IsNullOrEmpty(txtAnswer1.Text) || String.IsNullOrEmpty(txtAnswer2.Text) || String.IsNullOrEmpty(txtAnswer3.Text) || String.IsNullOrEmpty(txtAnswer4.Text) || String.IsNullOrEmpty(cboResult.Text))
+            if (String.IsNullOrEmpty(txtQPrompt.Text) || 
+                String.IsNullOrEmpty(txtQContent.Text) || 
+                String.IsNullOrEmpty(txtAnswer1.Text) || 
+                String.IsNullOrEmpty(txtAnswer2.Text) || 
+                String.IsNullOrEmpty(txtAnswer3.Text) || 
+                String.IsNullOrEmpty(txtAnswer4.Text) || 
+                String.IsNullOrEmpty(cboResult.Text))
             {
                 MessageBox.Show("Vui lòng nhập đầy đủ thông tin!");
                 return;
             }
             else
             {
+                var user = context.Accounts.FirstOrDefault(a => a.User.Equals(this.name));
                 var newQuestion = new Question
                 {
+                    CreateBy = user.Id,
                     QuestionPrompt = txtQPrompt.Text,
                     Content = txtQContent.Text,
                     Answers1 = txtAnswer1.Text,

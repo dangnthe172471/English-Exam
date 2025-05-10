@@ -1,17 +1,6 @@
 ﻿using ProjectPRN.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace ProjectPRN
 {
@@ -49,7 +38,7 @@ namespace ProjectPRN
         private void ShowResult()
         {
             var userAnswers = context.UserAnswers
-                                    .Where(ua => ua.AccountId == accountId && ua.ExamId == examId && ua.Solan==solan )
+                                    .Where(ua => ua.AccountId == accountId && ua.ExamId == examId && ua.Solan == solan)
                                     .ToList();
 
             var resultView = new List<Object>();
@@ -67,9 +56,12 @@ namespace ProjectPRN
                         STT = stt++,
                         QuestionPropmt = question.QuestionPrompt,
                         QuestionContent = question.Content,
-                        UserAnswer = userAnswer.SelectedAnswer,
-                        CorrectAnswer = question.ResultNum.ToString(),                        
+                        UserAnswer = userAnswer.SelectedAnswer.Equals("1") ? question.Answers1 : (userAnswer.SelectedAnswer.Equals("2") ? question.Answers2 : (userAnswer.SelectedAnswer.Equals("3") ? question.Answers3 : (userAnswer.SelectedAnswer.Equals("4") ? question.Answers4 : ""))),
+                        CorrectAnswer = question.ResultNum == 1 ? question.Answers1 : (question.ResultNum == 2 ? question.Answers2 : (question.ResultNum == 3 ? question.Answers3 : (question.ResultNum == 4 ? question.Answers4 : ""))),
+                        //UserAnswer = userAnswer.SelectedAnswer,
+                        //CorrectAnswer = question.ResultNum.ToString(),
                         Result = isCorrect ? "Đúng" : "Sai"
+
                     }); ;
                     totalQ++;
                 }
@@ -82,8 +74,6 @@ namespace ProjectPRN
             txtCorrect.Text = corectQ.ToString();
             txtTotal.Text = totalQ.ToString();
             DataContext = this;
-            //UserAnswer = userAnswer.SelectedAnswer.Equals("1") ? question.Answers1 : (userAnswer.SelectedAnswer.Equals("2") ? question.Answers2 : (userAnswer.SelectedAnswer.Equals("3") ? question.Answers3 : (userAnswer.SelectedAnswer.Equals("4") ? question.Answers4 : ""))),
-            //CorrectAnswer = question.ResultNum == 1 ? question.Answers1 : (question.ResultNum == 2 ? question.Answers2 : (question.ResultNum == 3 ? question.Answers3 : (question.ResultNum == 4 ? question.Answers4 : ""))),
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -94,7 +84,7 @@ namespace ProjectPRN
 
         private void ResultDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-
+            return;
         }
     }
 }

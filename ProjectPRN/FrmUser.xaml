@@ -30,8 +30,13 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
-
-        <ListBox x:Name="ExamListBox" DisplayMemberPath="Name" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,45,533,0" />
+        <TextBlock Margin="60,23,5,217">Bài thi chưa làm</TextBlock>
+        <ListBox x:Name="ExamListBox" 
+                 DisplayMemberPath="Name" 
+                 Grid.Column="0" 
+                 Grid.ColumnSpan="2" 
+                 Margin="0,45,533,0"
+                 SelectionChanged="ExamListBox_SelectionChanged" />
 
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
@@ -43,9 +48,16 @@
                 <Button Content="Làm bài" Style="{StaticResource ButtonStyle}" FontSize="18" Click="StartExamButton_Click" Margin="190,5,38,5" Width="160" Height="30" />
                 <Button Content="↩️" Style="{StaticResource ButtonStyle}" FontSize="20" Click="Button_Click" Height="27" Margin="38,0,0,80"/>
             </StackPanel>
-
-            <DataGrid x:Name="HistoryDataGrid" Margin="0,130,0,0" Grid.RowSpan="2" PreviewMouseLeftButtonDown="DataGrid_PreviewMouseLeftButtonDown" PreviewKeyDown="DataGrid_PreviewKeyDown" MouseDoubleClick="HistoryDataGrid_MouseDoubleClick" ColumnWidth="*"/>
+            <TextBlock Margin="20,102,-21,187" Grid.RowSpan="2" >Bài thi đã hoàn thành</TextBlock>
+            <DataGrid x:Name="HistoryDataGrid" 
+                      Margin="0,130,0,0" 
+                      Grid.RowSpan="2" 
+                      PreviewMouseLeftButtonDown="DataGrid_PreviewMouseLeftButtonDown" 
+                      PreviewKeyDown="DataGrid_PreviewKeyDown" 
+                      MouseDoubleClick="HistoryDataGrid_MouseDoubleClick" 
+                      ColumnWidth="*"
+                      SelectionChanged="HistoryDataGrid_SelectionChanged"/>
         </Grid>
-        <Label Content="Danh sách đề thi" FontSize="30" FontWeight="Bold" Foreground="Blue" HorizontalAlignment="Left" Margin="242,-6,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <Label Content="Danh sách đề thi" FontSize="30" FontWeight="Bold" Foreground="Blue" HorizontalAlignment="Left" Margin="5,8,0,0" VerticalAlignment="Top" Grid.Column="1"/>
     </Grid>
 </Window>

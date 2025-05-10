@@ -1,19 +1,5 @@
-﻿using Microsoft.Identity.Client;
-using Microsoft.Identity.Client.NativeInterop;
-using ProjectPRN.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ProjectPRN.Models;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace ProjectPRN
@@ -169,20 +155,34 @@ namespace ProjectPRN
         private void TimeUp()
         {
             SaveSelectedAnswer();
+
+            var user = context.Accounts.FirstOrDefault(a => a.User.Equals(this.name));
+            var examS = context.Scores
+                         .Where(sc => sc.ExamId == examID && sc.AccountId == user.Id)
+                         .OrderByDescending(sc => sc.Solan)
+                         .FirstOrDefault();
+
             // Lưu điểm số vào bảng Score
-            double score = CalculateScore(); // Phương thức để tính điểm số của người dùng
-            SaveScore(score);
+            double score = CalculateScore();
+
+            int solan = 1;
+
+            if (examS != null)
+            {
+                solan = (examS.Solan ?? 0) + 1;
+            }
+
+            SaveScore(score, solan);
 
             // Lưu đáp án từng câu vào bảng UserAnswers
-            SaveUserAnswers();
+            SaveUserAnswers(solan);
 
             // Dừng bộ đếm thời gian và thông báo đã nộp bài
             timer.Stop();
             MessageBox.Show("Exam submitted!");
 
             // Hiển thị màn hình kết quả
-            var user = context.Accounts.FirstOrDefault(a => a.User.Equals(this.name));
-            FrmExamResults resultWindow = new FrmExamResults(user.Id, examID, this.name,1);
+            FrmExamResults resultWindow = new FrmExamResults(user.Id, examID, this.name, solan);
             resultWindow.Show();
             this.Close();
         }
@@ -191,44 +191,34 @@ namespace ProjectPRN
             if (MessageBox.Show("Bạn có chắc muốn nộp bài không?", "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 var user = context.Accounts.FirstOrDefault(a => a.User.Equals(this.name));
-                var examS = context.Scores.FirstOrDefault(sc => sc.ExamId == examID && sc.AccountId == user.Id);
-
+                var examS = context.Scores
+                             .Where(sc => sc.ExamId == examID && sc.AccountId == user.Id)
+                             .OrderByDescending(sc => sc.Solan)
+                             .FirstOrDefault();
 
                 // Lưu điểm số vào bảng Score
                 double score = CalculateScore(); // Phương thức để tính điểm số của người dùng
+                int solan = 1;
                 if (examS != null)
                 {
-                    SaveScore2(score);
-                    // Lưu đáp án từng câu vào bảng UserAnswers
-                    SaveUserAnswers2();
-
-                    // Dừng bộ đếm thời gian và thông báo đã nộp bài
-                    timer.Stop();
-                    MessageBox.Show("Exam submitted!");
-
-                    // Hiển thị màn hình kết quả
-
-                    FrmExamResults resultWindow = new FrmExamResults(user.Id, examID, this.name, 2);
-                    resultWindow.Show();
-                    this.Close();
+                    solan = (examS.Solan ?? 0) + 1;
+                    SaveScore(score, solan);
+                    SaveUserAnswers(solan);
                 }
                 else
                 {
-                    SaveScore(score);
-                    // Lưu đáp án từng câu vào bảng UserAnswers
-                    SaveUserAnswers();
-
-                    // Dừng bộ đếm thời gian và thông báo đã nộp bài
-                    timer.Stop();
-                    MessageBox.Show("Exam submitted!");
-
-                    // Hiển thị màn hình kết quả
-
-                    FrmExamResults resultWindow = new FrmExamResults(user.Id, examID, this.name, 1);
-                    resultWindow.Show();
-                    this.Close();
+                    SaveScore(score, solan);
+                    SaveUserAnswers(solan);
                 }
 
+                // Dừng bộ đếm thời gian và thông báo đã nộp bài
+                timer.Stop();
+                MessageBox.Show("Exam submitted!");
+
+                // Hiển thị màn hình kết quả với số lần thi
+                FrmExamResults resultWindow = new FrmExamResults(user.Id, examID, this.name, solan);
+                resultWindow.Show();
+                this.Close();
             }
         }
 
@@ -267,7 +257,7 @@ namespace ProjectPRN
         }
 
 
-        private void SaveScore(double score)
+        private void SaveScore(double score, int solan)
         {
             var user = context.Accounts.FirstOrDefault(a => a.User.Equals(this.name));
 
@@ -277,55 +267,12 @@ namespace ProjectPRN
                 ExamId = this.examID,
                 Date = DateTime.Now.ToString(),
                 Mark = score,
-                Solan = 1,
+                Solan = solan,
             };
             context.Scores.Add(newScore);
             context.SaveChanges();
         }
-        private void SaveScore2(double score)
-        {
-            var user = context.Accounts.FirstOrDefault(a => a.User.Equals(this.name));
-
-            Score newScore = new Score
-            {
-                AccountId = user.Id,
-                ExamId = this.examID,
-                Date = DateTime.Now.ToString(),
-                Mark = score,
-                Solan = 2,
-            };
-            context.Scores.Add(newScore);
-            context.SaveChanges();
-        }
-        private void SaveUserAnswers()
-        {
-            var user = context.Accounts.FirstOrDefault(a => a.User.Equals(this.name));
-
-            for (int index = 0; index < questions.Count; index++)
-            {
-                int selectedAnswer = 0; // Giá trị mặc định là 0
-
-                // Kiểm tra xem index có nằm trong khoảng hợp lệ của selectedAnswersList
-                if (index >= 0 && index < selectedAnswersList.Count && selectedAnswersList[index].HasValue)
-                {
-                    selectedAnswer = selectedAnswersList[index].Value;
-                }
-
-                // Lưu đáp án từng câu vào bảng UserAnswers
-                UserAnswer userAnswer = new UserAnswer
-                {
-                    AccountId = user.Id,
-                    ExamId = this.examID,
-                    QuestionId = questions[index].Id, // Lấy ID của câu hỏi từ danh sách questions
-                    SelectedAnswer = selectedAnswer.ToString()
-                };
-                context.UserAnswers.Add(userAnswer);
-            }
-
-            context.SaveChanges();
-        }
-
-        private void SaveUserAnswers2()
+        private void SaveUserAnswers(int solan)
         {
             var user = context.Accounts.FirstOrDefault(a => a.User.Equals(this.name));
 
@@ -346,14 +293,12 @@ namespace ProjectPRN
                     ExamId = this.examID,
                     QuestionId = questions[index].Id, // Lấy ID của câu hỏi từ danh sách questions
                     SelectedAnswer = selectedAnswer.ToString(),
-                    Solan =2 
+                    Solan = solan,
                 };
                 context.UserAnswers.Add(userAnswer);
             }
 
             context.SaveChanges();
         }
-
-
     }
 }
