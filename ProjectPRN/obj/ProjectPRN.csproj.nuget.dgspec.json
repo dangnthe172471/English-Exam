@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\A\\Ky5\\SE1804-PRN\\ProjectPRN\\ProjectPRN\\ProjectPRN.csproj": {}
+    "D:\\A\\Git\\English-Exam\\ProjectPRN\\ProjectPRN.csproj": {}
   },
   "projects": {
-    "D:\\A\\Ky5\\SE1804-PRN\\ProjectPRN\\ProjectPRN\\ProjectPRN.csproj": {
+    "D:\\A\\Git\\English-Exam\\ProjectPRN\\ProjectPRN.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\A\\Ky5\\SE1804-PRN\\ProjectPRN\\ProjectPRN\\ProjectPRN.csproj",
+        "projectUniqueName": "D:\\A\\Git\\English-Exam\\ProjectPRN\\ProjectPRN.csproj",
         "projectName": "ProjectPRN",
-        "projectPath": "D:\\A\\Ky5\\SE1804-PRN\\ProjectPRN\\ProjectPRN\\ProjectPRN.csproj",
+        "projectPath": "D:\\A\\Git\\English-Exam\\ProjectPRN\\ProjectPRN.csproj",
         "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-        "outputPath": "D:\\A\\Ky5\\SE1804-PRN\\ProjectPRN\\ProjectPRN\\obj\\",
+        "outputPath": "D:\\A\\Git\\English-Exam\\ProjectPRN\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
